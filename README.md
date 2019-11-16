@@ -8,7 +8,7 @@ To fit and approximate Newton's law of gravity we used Euler's method. Its accur
 ## Higher order methods
 To get better results on their positions we used a 4th order Runge-Kutta method. It is a well famous system of differential equations. It consists in taking steps for each iteration so that the accuracy is improved. The equation for solving it is <br>
 <br>
-![RK4 method](solarSystemRK4.png)
+![RK4 method](rkex.png)
 
 ## Run the code
 Intellij is required to build this project.
