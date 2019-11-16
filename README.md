@@ -1,5 +1,6 @@
 # Titanic Space Odyssey
-This project consists in implementing the solar system using systems of differential equations and compute the trajectory of a rocket to titan. 
+This project consists in implementing the solar system using systems of differential equations and compute the trajectory of a rocket to titan. <br>
+![our solar system in 3d](solarSystemRK4.png)
 ## Data for Celesital Bodies
 The data for both positions and velocities have been taken from https://ssd.jpl.nasa.gov/horizons.cgi and then transformed into 3-dimensional vectors. 
 ## Euler's method for planetary motions
