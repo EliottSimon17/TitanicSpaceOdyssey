@@ -7,3 +7,17 @@ To fit and approximate Newton's law of gravity we used Euler's method. Its accur
 ## Higher order methods
 To get better results on their positions we used a 4th order Runge-Kutta method. It is a well famous system of differential equations. It consists in taking steps for each iteration so that the accuracy is improved. The equation for solving it is <br>
 
+## Run the code
+Intellij is required to build this project.
+unzip\
+Set the project structure so that the src folder is the source of the project
+
+We have two different codes to run.
+Launcher contains both the solar system and the trajectory to titan
+```bash
+java Launcher
+```
+then run GUILandind.java file to see the landing on Titan
+```bash
+java GUILanding
+```
