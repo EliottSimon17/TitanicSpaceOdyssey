@@ -6,9 +6,16 @@ The data for both positions and velocities have been taken from https://ssd.jpl.
 ## Euler's method for planetary motions
 To fit and approximate Newton's law of gravity we used Euler's method. Its accuracy is not great :cry: since it is a first-order solver. Though it is easy to implement.
 ## Higher order methods
+### Runge-Kutta 4th Order
 To get better results on their positions we used a 4th order Runge-Kutta method. It is a well famous system of differential equations. It consists in taking steps for each iteration so that the accuracy is improved. The equation for solving it is <br>
 <br>
-![RK4 method](rkex.png)
+![RK4 method](rkex.png)<br>
+### Yoshida solver
+Yoshida method goes along with the leapfrog method. It simply adds more steps to it to get better accuracies, naturally the energy conservation is increased as the time complexity decreases. <br>
+This solver requires some coefficients which can be called "yoshida coefficients" and can be computed as follow:<br>
+
+![Yoshida Coef](coef.png)<br>
+
 
 ## Run the code
 Intellij is required to build this project.
