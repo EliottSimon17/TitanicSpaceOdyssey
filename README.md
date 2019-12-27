@@ -15,13 +15,13 @@ Yoshida method goes along with the leapfrog method. It simply adds more steps to
 This solver requires some coefficients which can be called "yoshida coefficients" and can be computed as follow:<br>
 
 ![Yoshida Coef](coef.png)<br>
-The integration can then be done as follow: (see the code for the application to Newton's method)<br>
-![Yoshida Coef](yoshi.png)<br>
-
+The integration can then be done as follow: (see the code for the application to Newton's method)<br> <br>
+![Yoshida Coef](yoshi.png)<br> <br>
+Where x and v represents the positions and velocities, respectively.
 
 ## Run the code
-Intellij is required to build this project.
-unzip\
+Intellij is required to build this project. <br>
+*unzip* <br>
 Set the project structure so that the src folder is the source of the project
 
 We have two different codes to run.
