@@ -59,7 +59,20 @@
  * Button & ToggleButton                                                       *
  *                                                                             *
  ******************************************************************************/
-
+#buttonNum{
+    -fx-background-color:
+          /*  linear-gradient(#3498db, #8e44ad),
+            linear-gradient(#3498db 0%, #8e44ad 49%, #8e44ad 50%, #3498db 100%);
+           */
+            linear-gradient(from 10% 10% to 100% 100%, #3498db, #8e44ad, #3498db);
+    -fx-background-insets:  0.0;
+    -fx-background-radius: 10.0;
+    -fx-padding: 0.7em;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-effect: dropshadow(three-pass-box, blue, 10, 0, 0, 0);
+}
 .toggle-button, .button{
     -fx-background-color: -flatter-blue;
     -fx-background-insets:  0.0;
@@ -173,7 +186,7 @@
  *                                                                             *
  ******************************************************************************/
 .combo-box-base {
-    -fx-skin: "com.guigarage.flatterfx.skin.FlatterComboBoxSkin";
+
 }
 
 .popup-overlay {
@@ -219,7 +232,11 @@
  ******************************************************************************/
 .combo-box-base,
 .choice-box {
-    -fx-background-color: -flatter-red;
+    -fx-background-color:
+        /*  linear-gradient(#3498db, #8e44ad),
+          linear-gradient(#3498db 0%, #8e44ad 49%, #8e44ad 50%, #3498db 100%);
+         */
+            linear-gradient(from 10% 10% to 100% 100%, #3498db, #8e44ad, #3498db);
     -fx-background-insets:  0.0;
     -fx-background-radius: 2.0;
     -fx-border-width: 0.0;

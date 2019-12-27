@@ -1,41 +1,32 @@
-
 import Data.*;
 import Landing.CelestialBody;
 import Landing.Rocket;
 import Test.NasaTest;
 import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
-
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Camera;
 import javafx.scene.Group;
-
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-
-
-
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
-
 import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.animation.Timeline;
-
 import javafx.util.Duration;
 
 
@@ -54,7 +45,7 @@ public class Main extends Application {
 
 
     Group world = new Group();
-    Group MoonGhost = new Group();
+   // Group MoonGhost = new Group();
     Date date = new Date(2019, 07, 15);
     public static CelestialBody[] planet = new CelestialBody[9];
     private CelestialBody centre;
@@ -64,15 +55,15 @@ public class Main extends Application {
 
     boolean doEuler=false;
     boolean doRungeKutta=false;
+    boolean doLeapFrog = false;
+    boolean doYoshi = false;
 
     private Button eButton = new Button("Euler");
-    private Button rButton = new Button("Runge Kutta");
+    private Button rButton = new Button("GO");
     private Label whichEquation = new Label("Which numerical equation?");
 
 
-    public double timeStep = 1;
-
-
+    public double timeStep = 1000;
 
     //Starting point  x and y
     private double anchorX, anchorY;
@@ -89,7 +80,7 @@ public class Main extends Application {
     Slider slider = prepareSlider();
 
     NumericalEquations ode;
-
+    private ObservableList<String> odeChoices = FXCollections.observableArrayList("Select ODE", "Euler", "Leapfrog", "Runge-Kutta 4", "Yoshida");
 
     public void start(Stage primaryStage) {
 
@@ -108,10 +99,14 @@ public class Main extends Application {
         labelBox.getChildren().add(whichEquation);
         labelBox.setAlignment(Pos.CENTER);
 
+        ComboBox combo = new ComboBox(odeChoices);
+        combo.getSelectionModel().selectFirst();
+
+
         HBox equationChooser = new HBox();
         equationChooser.setAlignment(Pos.CENTER);
         equationChooser.setSpacing(50);
-        equationChooser.getChildren().addAll(eButton, rButton);
+        equationChooser.getChildren().addAll(combo, rButton);
 
         v.setAlignment(Pos.CENTER);
         v.setSpacing(20);
@@ -308,9 +303,17 @@ public class Main extends Application {
         rButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 primaryStage.setScene(scene);
-                doRungeKutta = true;
+                switch(combo.getValue().toString()){
+                    case "Leapfrog": doLeapFrog = true; break;
+                    case "Runge-Kutta 4": doRungeKutta = true; break;
+                    case "Euler": doEuler = true; break;
+                    case "Yoshida": doYoshi = true; break;
+
+                }
+                //doRungeKutta = true;
             }
         });
+
 
         earthCentre.setOnAction(e -> centre = planet[3]);
 
@@ -341,15 +344,17 @@ public class Main extends Application {
 
         //System.out.println("Time Step : " + timeStep);
 
-
         Timeline timer = new Timeline(
-                new KeyFrame(Duration.millis(0.1), e -> {
-                    if(doEuler || doRungeKutta) {
+                new KeyFrame(Duration.millis(1), e -> {
+                    if(doEuler || doRungeKutta || doLeapFrog || doYoshi) {
                         redraw();
                         time();
                         if(doEuler){ euler(); }
-                        else{ ode.rungeKutta(this.planet);
-                        test(); }
+                        else if (doRungeKutta){ ode.rungeKutta(this.planet); }
+                        else if (doLeapFrog){ ode.leapfrog(this.planet); }
+                        else if (doYoshi){ ode.yoshida4th(this.planet);
+                        }
+                        test();
                         seeDate();
                     }
 
@@ -387,7 +392,7 @@ public class Main extends Application {
         double abs_error = Math.abs(NasaTest.earthAfterOneYear.x-planet[3].getXPosition());
         System.out.println(" One Year: " + "\n" + " absolute error :" + abs_error);
         double rel_error = abs_error/Math.abs(NasaTest.earthAfterOneYear.x);
-        System.out.println(" absolute error : " + rel_error*100);
+        System.out.println(" relative error : " + rel_error*100);
 
     }
 
@@ -396,7 +401,7 @@ public class Main extends Application {
         double abs_error = Math.abs(NasaTest.earthAfterTenYears.x-planet[3].getXPosition());
         System.out.println(" Ten Year: " + "\n" + " absolute error :" + abs_error);
         double rel_error = abs_error/NasaTest.earthAfterTenYears.x;
-        System.out.println(" absolute error : " + rel_error*100);
+        System.out.println(" relative error : " + rel_error*100);
 
 
     }
@@ -507,7 +512,7 @@ public class Main extends Application {
 
     public void time(){
         timeStep = slider.getValue();
-        timeStepValue.setText("Time Step :" + (int) timeStep + " s ");
+        timeStepValue.setText("Time Step :" + (int) timeStep + "s");
 
     }
     public void seeDate(){

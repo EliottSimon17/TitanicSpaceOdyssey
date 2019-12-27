@@ -61,7 +61,107 @@ public class NumericalEquations {
         body.setVel(bodies, vk);
         body.setPos(bodies, pk);
 
+    }
+
+    public void leapfrog(CelestialBody[] bodies){
+        Point[] pos = new Point[bodies.length];
+        Point[] vel = new Point[bodies.length];
+        for(int i  = 0 ; i < bodies.length ; i ++){
+            pos[i] = bodies[i].location.samePoint();
+            vel[i] = bodies[i].velocity.samePoint();
+        }
+        Point[] acc = body.integrateAcc(bodies, pos);
+        Point[] vClone = vel.clone();
+
+        for(int i = 0 ; i < bodies.length ; i ++){
+            vel[i] = vel[i].returnAdded(acc[i].samePoint().scale(timeStep*.5));
+        }
+
+        //Integrates the position and take a step (2nd order)
+        Point[] newPosition = body.integratePosition(pos, vel, timeStep);
+        Point[] acc2 = body.integrateAcc(bodies, newPosition);
+
+        for(int i = 0 ; i < bodies.length ; i ++){
+            acc[i] = acc[i].returnAdded(acc2[i]);
+        }
+
+        Point[] newVel = body.integrateVel(vClone, acc, timeStep*.5);
+
+        body.setPos(bodies, newPosition);
+        body.setVel(bodies, newVel);
+    }
+
+    public void yoshida4th(CelestialBody[] bodies){
+        double w0 = -(Math.pow(2,(double)1/3)/(2-Math.pow(2,(double)1/3)));
+        double w1 = 1/ (2 - (Math.pow(2,(double)1/3)));
+        double c1 = w1/2;
+        double c2 = (w0+w1)/2;
+
+        Point [] p1, p2, p3, p4;
+        Point [] v1, v2, v3;
+        Point [] acc;
+        Point[] pk = new Point[bodies.length];
+        Point[] vk = new Point[bodies.length];
+
+
+        for(int i = 0 ; i < bodies.length; i++){
+            pk[i] = bodies[i].location.clone();
+            vk[i] = bodies[i].velocity.clone();
+        }
+
+        p1 = body.integratePosition(pk, vk, timeStep*c1);
+        acc = body.integrateAcc(bodies, p1);
+        v1 = body.integrateVel(vk, acc, timeStep*w1);
+
+        p2 = body.integratePosition(p1, v1, timeStep*c2);
+        acc = body.integrateAcc(bodies, p2);
+        v2 = body.integrateVel(v1, acc, timeStep*w0);
+
+        p3 = body.integratePosition(p2, v2, timeStep*c2);
+        acc = body.integrateAcc(bodies, p3);
+        v3 = body.integrateVel(v2, acc, timeStep*w1);
+
+        p4 = body.integratePosition(p3, v3, timeStep*c1);
+        //acc = body.integrateAcc
+
+        body.setPos(bodies, p4);
+        body.setVel(bodies, v3);
 
     }
+
+    public void rungekutta6(CelestialBody[] bodies){
+        Point[] p1, p2, p3, p4, p5, p6;
+        Point[] pk = new Point[bodies.length];
+
+        Point[] v1, v2, v3, v4, v5, v6;
+        Point[] vk = new Point[bodies.length];
+
+        Point[] k1, k2, k3, k4, k5, k6;
+
+        Point[] position = new Point[bodies.length];
+        Point[] velocity = new Point[bodies.length];
+
+        for(int i = 0 ; i < bodies.length; i++){
+            pk[i] = new Point(0,0,0);
+            vk[i] = new Point(0,0,0);
+            position[i] = bodies[i].location;
+            velocity[i] = bodies[i].velocity;
+        }
+
+        p1 = position;
+        v1 = velocity;
+        k1 = body.integrateAcc(bodies, p1);
+
+        v2 = body.integrateVel(velocity, k1, timeStep*(1/9));
+        p2 = body.integratePosition(position, v1, timeStep*(1/9));
+        k2 = body.integrateAcc(bodies, p2);
+
+        v3 = body.integrateVel(velocity, k2, timeStep*(1/6));
+        p3 = body.integratePosition(position, v2, timeStep* (1/6));
+
+
+    }
+
+
 
 }

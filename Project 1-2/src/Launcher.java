@@ -18,7 +18,10 @@ public class Launcher extends Application {
     public void start(Stage primaryStage){
 
         traj.setPrefSize(180, 50);
+        whichEquation.setUnderline(true);
         whichEquation.setFont(new Font(35));
+        sol.setId("buttonNum");
+        traj.setId("buttonNum");
 
         VBox v = new VBox();
 
@@ -62,6 +65,4 @@ public class Launcher extends Application {
         primaryStage.show();
 
     }
-
-
 }
