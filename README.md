@@ -15,6 +15,8 @@ Yoshida method goes along with the leapfrog method. It simply adds more steps to
 This solver requires some coefficients which can be called "yoshida coefficients" and can be computed as follow:<br>
 
 ![Yoshida Coef](coef.png)<br>
+The integration can then be done as follow: (see the code for the application to Newton's method)<br>
+![Yoshida Coef](yoshi.png)<br>
 
 
 ## Run the code
